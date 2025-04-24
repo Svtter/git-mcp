@@ -13,3 +13,6 @@ dependencies = [
 dev = [
     "ruff>=0.11.6",
 ]
+test = [
+    "pytest-dotenv>=0.5.2",
+]
