@@ -22,7 +22,9 @@ This will start a MCP server on your machine.
 
 ### Run from Docker
 
-`docker run --rm -t -v $(pwd):/repos -e REPO_DIR=/repos svtter/git-mcp`
+In your repos folder, run:
+
+`docker run --rm -t -v $(pwd):/repos -p 8000:8000 -e REPO_DIR=/repos svtter/git-mcp`
 
 ## Config
 
