@@ -17,13 +17,30 @@ class RepoContext(object):
   def repodir():
     return os.environ.get("REPO_DIR", "/home/svtter/work/project")
 
-  def get_repo_path(self, repo_name: str):
-    return os.path.join(self.repodir(), repo_name)
+  @staticmethod
+  def get_repo_path(repo_name: str):
+    return os.path.join(RepoContext.repodir(), repo_name)
+
+
+class RepoHandler(object):
+  def __init__(self, repo_name: str):
+    self.repo_name = repo_name
+    self.repo_path = RepoContext.get_repo_path(repo_name)
+    self.repo = gitRepo(self.repo_path)
+
+  def status(self) -> str:
+    import subprocess
+
+    output = subprocess.run(
+      ["git", "status"], cwd=self.repo_path, capture_output=True, text=True
+    )
+    return output.stdout
 
 
 def create_repo(repo_name: str) -> gitRepo:
   """
   Create a gitpython.Repo object.
+  repo_name: The name of the repository to create.
   """
   repo_path = RepoContext.get_repo_path(repo_name)
   repo = gitRepo(repo_path)
@@ -57,6 +74,7 @@ def get_app_version() -> str:
 def add(repo_name: str):
   """
   Add the changes to the repository.
+  repo_name: The name of the repository to add the changes to.
   """
   repo = create_repo(repo_name)
   repo.index.add(repo.untracked_files)
@@ -67,15 +85,17 @@ def add(repo_name: str):
 def status(repo_name: str):
   """
   Get the status of the repository.
+  repo_name: The name of the repository to get the status of.
   """
-  repo = create_repo(repo_name)
-  return repo.index.status()
+  rh = RepoHandler(repo_name)
+  return rh.status()
 
 
 @mcp.resource("files://{repo_name}/{file_path}")
 def get_file(repo_name: str, file_path: str):
   """
   Get the file content from the repository.
+  repo_name: The name of the repository to get the file content from.
   file_path: The path to the file to get the content of, relative to the root of the repository.
   """
   file_path = os.path.join(repo_name, file_path)
@@ -92,6 +112,7 @@ def get_file(repo_name: str, file_path: str):
 def diff(repo_name: str):
   """
   Get the diff of the repository.
+  repo_name: The name of the repository to get the diff of.
   """
   repo = create_repo(repo_name)
   return repo.index.diff()
@@ -101,6 +122,7 @@ def diff(repo_name: str):
 def branch(repo_name: str):
   """
   Get the branch of the repository.
+  repo_name: The name of the repository to get the branch of.
   """
   repo = create_repo(repo_name)
   return repo.active_branch.name
@@ -110,6 +132,8 @@ def branch(repo_name: str):
 def checkout(repo_name: str, branch: str):
   """
   Checkout the branch of the repository.
+  repo_name: The name of the repository to checkout the branch of.
+  branch: The branch to checkout.
   """
   repo = create_repo(repo_name)
   repo.git.checkout(branch)
@@ -119,6 +143,7 @@ def checkout(repo_name: str, branch: str):
 def pull(repo_name: str):
   """
   Pull the changes from the repository.
+  repo_name: The name of the repository to pull the changes from.
   """
   repo = create_repo(repo_name)
   repo.remotes.origin.pull()
@@ -128,6 +153,8 @@ def pull(repo_name: str):
 def commit(repo_name: str, message: str):
   """
   Commit the changes to the repository.
+  repo_name: The name of the repository to commit the changes to.
+  message: The message to commit the changes with.
   """
   repo = create_repo(repo_name)
   repo.index.commit(message)
