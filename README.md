@@ -4,6 +4,12 @@ A MCP tool to using git, built with [FastMCP](https://gofastmcp.com/getting-star
 
 ## Usage
 
+Set up your repos folder on your own disk.
+
+```bash
+REPO_DIR=<your repo dir>
+```
+
 Start server.py
 
 ```bash

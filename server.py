@@ -70,7 +70,7 @@ def get_app_version() -> str:
   return __version__
 
 
-@mcp.resource("data://list_repos")
+@mcp.tool()
 def list_repos() -> list[str]:
   """Returns a list of all repositories in the repository directory."""
   return {"repos": os.listdir(RepoContext.repodir())}
