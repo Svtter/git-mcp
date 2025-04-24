@@ -4,7 +4,9 @@ A MCP tool to using git, built with [FastMCP](https://gofastmcp.com/getting-star
 
 ## Usage
 
-Set up your repos folder on your own disk.
+You set up your repos folder on your own disk.
+
+### Run from source code
 
 ```bash
 REPO_DIR=<your repo dir>
@@ -17,6 +19,10 @@ uv run server.py
 ```
 
 This will start a MCP server on your machine.
+
+### Run from Docker
+
+`docker run --rm -t -v $(pwd):/repos -e REPO_DIR=/repos svtter/git-mcp`
 
 ## Config
 
