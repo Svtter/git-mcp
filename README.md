@@ -1,6 +1,6 @@
 # Git MCP
 
-A MCP tool to using git
+A MCP tool to using git, built with [FastMCP](https://gofastmcp.com/getting-started/welcome).
 
 ## Usage
 
@@ -10,7 +10,23 @@ Start server.py
 uv run server.py
 ```
 
+This will start a MCP server on your machine.
+
+## Config
+
 Config your MCP application
+
+```json
+{
+  "mcpServers": {
+    "git": {
+      "url": "http://<your_host>:8000/sse"
+    }
+  }
+}
+```
+
+For example,
 
 ```json
 {
